@@ -10,16 +10,22 @@ function deleteExistingOutputFile() {
   }
 }
 
-function processData() {
+function processData() {  
+  deleteExistingOutputFile();
   const data = fs.readFileSync(inputFile, "utf-8");
   const lines = data.split(/\n/);
-
-  for (let line of lines) {
-    elements = line.split(delimiter);
-    console.log(elements);
+  let lengths = new Array(25).fill(0);
+  for (let line of lines) {     
+    let password = line.split(delimiter)[1];    
+    lengths[password.length]++;
   }
+  lengths.forEach( (length,index) => {
+    //console.log(`Chars: ${index}, Count: ${length}`);  
+    let outline = `Chars: ${index}, Count: ${length}\n`
+    fs.appendFileSync(outputFile,outline,"utf-8")
+  });  
 }
 
 // Main execution
-deleteExistingOutputFile(); 
+//deleteExistingOutputFile(); 
 processData();
